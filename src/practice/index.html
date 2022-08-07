@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = document.getElementById("root");
+    
+    function countUp(){}
+    function App() {
+      // g:15 - 20는 useState의 구조와 비구조화 할당에 대해서 알아본거야.
+      // const data = React.useState();
+      // console.log(data); [undefined,f] //useState의 초기값과 그 값에대한 리렌더 할 함수가 찍힘
+      // const counter = data[0];
+      // const modifier = data[1];
+      // console.log(counter);
+      // console.log(modifier);
+
+      const [counter, setCounter] = React.useState(0);
+      const onClick = () => {
+        // state값을 업데이틑 하는 방법은 아래 2가지야. 2번째 방법을 사용하는게 좋을꺼야
+        // setCounter(counter + 1);  // 직접 set함수에 넣어주는 방법이있어
+        setCounter((current) => current+1) //current에 초기state값을 담고 함수로 state를 넘기는 방법있어
+        
+      }
+    
+      return(
+        <div>
+        <h3 id="title" >
+          Total Clicks : {counter}
+        </h3>
+        <button onClick={onClick}>Click me</button>
+      </div>
+      )
+
+    }
+    //render 는 사용자에게 보여준다
+    //props 안에서 addEventLister 를 해주는건 아주 훌륭한거다.
+    //그냥 렌더만 될뿐, 화면 새로고침을 해주는 리렌더 기능이 없음!!
+    // 위에 카운터 함수에 리렌더를 걸어줌
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

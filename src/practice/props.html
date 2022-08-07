@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <style type="text/css"></style>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    //자식 컴포넌트
+    function Btn({ text, onClick, fontSize }) {
+      console.log(text, "was rendered");
+      return (
+        <button
+          onClick={onClick} //컴포넌트 안에서 얘는 이벤트 리스너야
+          style={{
+            backgroundColor: "tomato",
+            color: "#fff",
+            padding: "10px 20px",
+            border: 0,
+            borderRadius: 10,
+            fontSize,
+            // fontSize:fontSize, -> 키: 값이 같으면 하나로 생략해서 쓸수있어!
+            // fontSize:big ? 18 : 16, //부모컨포넌트에서 big 값이 있냐없냐에 따라 다르게 줄수도있어
+          }}
+        >
+          {text}
+        </button>
+      );
+    }
+    Btn.propTypes = {
+      text: PropTypes.string,
+      fontSize: PropTypes.number,
+    };
+
+    const MemorizeBtn = React.memo(Btn);
+
+    //부모컨포넌트
+    function App() {
+      const [value, setValue] = React.useState("Save Changes");
+      const changeValue = () => setValue("Revert changes");
+
+      //return 안에 있는(커스텀 컴포넌트의 달아준) onClick의 역할은 단지 prop 일뿐이야
+      return (
+        <div>
+          <Btn text={value} onClick={changeValue} fontSize={18} />
+          <Btn text={11} fontSize={"tt"} />
+        </div>
+      );
+    }
+
+    const root = document.getElementById("root");
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

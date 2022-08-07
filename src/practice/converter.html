@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <style type="text/css">
+    .converter-wrap {width:300px; margin:0 auto;}
+    h1 {text-align: center;}
+    .form-group {margin-bottom:20px;}
+    .form-group label {font-size:1.5rem;}
+    .form-group input {margin:0 10px;}
+    .form-group span {font-size:1rem; }
+    .button-group { display: flex; justify-content: space-between;}
+    button {width:120px; height:40px; border:none; background: salmon; color:#eee; font-size:18px;}
+
+  </style>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function MinutesHours() {
+      const [amount,setAmount] = React.useState(0);
+
+      //flipped(이라는 state)에 단순히 true & false 담을꺼야
+      const [inverted,setInverted] = React.useState(false);
+
+      const onChanage = (event) => {
+        // console.log(event.target.value);
+        // console.log(event) -> onChange 이벤트가 찍힘!
+        // console.log(event.target) -> value가 적히고있는 input이 찍혀
+        // console.log(event.target.value) -> onChange가 걸려있는 input에 value가 찍혀
+
+        // Q. setMinute는 state(값)을 담아서 리렌더링(업데이트)하는 함수인데 왜거기에 담을까?
+        // A. input에 담긴 값을 어딘가에서 쓸거라 변수에 담아서 접근하려고!
+        setAmount(event.target.value);
+      }
+
+      //이 함수의 내용은 input들의 상태값을 초기로 돌려! -> button Reset에 연결해주면돼
+      const handleReset = () => {setAmount(0)}
+      //이 함수의 내용은 true -> false / false -> true 로 바꿔주는 거야 
+      const handleInvert = () => {
+        handleReset();
+        setInverted((current) => !current)
+      }
+
+      /*
+        inverted의 첫 값(=기본값, 초기값)은 false야 
+        따라서  각 input에 disabled는 일치하면 활성화고 불일치하면 비활성화야
+      */
+
+      return(
+       <>
+        <div className="form-group">
+            <label htmlFor="minutes">Minutes</label>
+            <input id="minutes" type="number" placeholder="Minutes" value={inverted ? amount * 60 : amount} onChange={onChanage} disabled={inverted}/>
+            <span>분</span>
+        </div>
+        <h4>you want convert {amount}</h4>
+        <div className="form-group">
+            <label htmlFor="hours">Hours</label>
+            <input id="hours" type="number" placeholder="Hours" value={inverted? amount: Math.round(amount/60)}  onChange={onChanage} disabled={!inverted}/>
+            <span>시간</span>
+        </div>
+        <div class="button-group">
+            <button onClick={handleReset}>Reset</button>
+            <button onClick={handleInvert}>{inverted? "Turn Back" : "Invert"}</button>
+        </div>
+      </>
+    )}
+
+    function MlToCm(){
+      const [length, setLength] = React.useState(0);
+      const [lengthIverted,setLengthInverted] = React.useState(false);
+
+      const onChangeLength = (event) => {
+        setLength(event.target.value);
+      }
+
+      const handleResetLength = ()=> {
+        setLength(0);
+      }
+
+      const handleInvertLength= () => {
+        handleResetLength();
+        setLengthInverted((current) => !current)
+      }
+
+      return (
+      <>  
+        <h3>밀리미터 to cm</h3>
+        <div class="form-group">
+          <label htmlFor="">Millimeters</label>  
+          <input type="number" placeholder="ml" value={lengthIverted? length*100: length} onChange={onChangeLength} disabled={lengthIverted} />
+          <span>밀리미터</span>
+        </div>
+        <h4>you want to convert {length} </h4>
+        <div class="form-group">
+          <label htmlFor="">centimeters</label>  
+          <input type="number" placeholder="cm" value={lengthIverted ? length : Math.round(length/60)} onChange={onChangeLength} disabled={!lengthIverted}/>
+          <span>센티미터</span>
+        </div>
+        <div class="button-group">
+            <button onClick={handleResetLength}>Reset</button>
+            <button onClick={handleInvertLength}>{lengthIverted? "Turn Back" : "Iverted"}</button>
+        </div>
+      </>
+      );
+    }
+
+
+    function App() {
+      const [index, setIndex] = React.useState("-1");
+   
+      const onSelect = (event) => {
+        setIndex(event.target.value);
+        // setIndex
+      }
+
+      return(
+        <div className="converter-wrap">
+          <h1>Super Converter</h1>
+          <select value={index} onChange={onSelect}>
+            <option value="-1">Plz select your units</option>
+            <option value="0">Minutes & Hours</option>
+            <option value="1">ml & cm</option>
+          </select>
+          <hr/>
+          {index === "-1" ? "Plz select yout units": null}
+          {index === "0" ? <MinutesHours/> : null }
+          {index === "1" ? <MlToCm/> : null }
+        </div>
+     )}
+          
+    const root = document.getElementById("root");
+    ReactDOM.render(<App />, root);
+  </script>
+</html>
