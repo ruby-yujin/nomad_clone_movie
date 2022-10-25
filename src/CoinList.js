@@ -54,14 +54,14 @@ function CoinList() {
           ฿{" "}
           <input
             placeholder="your BTC"
-            value={usdMoney * 0.000052}
+            value={btcPrice}
             onChange={onHowMuchBtc}
           />
         </Item>
       </FlexBox>
 
       <p>
-        your usd : {usdMoney} <br />
+        convert USD : {btcPrice / 0.000052} <br />
         convert BTC : {usdMoney * 0.000052}
       </p>
     </div>
@@ -70,12 +70,14 @@ function CoinList() {
 
 const FlexBox = styled.div`
   display: flex;
-  height: 200px;
+  align-items: center;
+  height: 50px;
   gap: 10px;
 `;
 
 const Item = styled.div`
-  border: 4px solid #ddd;
+  background: #ddd;
+  padding: 1rem;
 `;
 
 export default CoinList;
