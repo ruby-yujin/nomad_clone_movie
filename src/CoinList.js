@@ -1,9 +1,12 @@
 import React from "react";
+import styled from "styled-components";
 import { useState, useEffect } from "react";
 
 function CoinList() {
   const [loading, setLoading] = useState(true);
   const [coins, setCoins] = useState([]);
+  const [usdMoney, setUsdMoney] = useState(0);
+  const [btcPrice, setBtcPrice] = useState(0);
 
   useEffect(() => {
     fetch("https://api.coinpaprika.com/v1/tickers")
@@ -15,12 +18,64 @@ function CoinList() {
   }, []);
   //https://api.coinpaprika.com/v1/tickers
 
+  const onHowMuchUsd = (e) => {
+    setUsdMoney(e.target.value);
+  };
+
+  const onHowMuchBtc = (e) => {
+    setBtcPrice(e.target.value);
+  };
+
   return (
     <div>
-      <h1>The Coin List</h1>
-      {loading ? <strong>Loading....</strong> : null}
+      <h1>The Coin List {loading ? "" : `(${coins.length})`}</h1>
+      {loading ? (
+        <strong>Loading....</strong>
+      ) : (
+        <select>
+          {coins.map((coin, id) => (
+            <option key={id}>
+              {coin.name} ({coin.symbol}) : ${coin.quotes.USD.price} USD
+            </option>
+          ))}
+        </select>
+      )}
+      <h2>USD to BTC convert</h2>
+      <FlexBox>
+        <Item>
+          ${" "}
+          <input
+            placeholder="your USD"
+            value={usdMoney}
+            onChange={onHowMuchUsd}
+          />
+        </Item>
+        <Item>
+          ฿{" "}
+          <input
+            placeholder="your BTC"
+            value={usdMoney * 0.000052}
+            onChange={onHowMuchBtc}
+          />
+        </Item>
+      </FlexBox>
+
+      <p>
+        your usd : {usdMoney} <br />
+        convert BTC : {usdMoney * 0.000052}
+      </p>
     </div>
   );
 }
+
+const FlexBox = styled.div`
+  display: flex;
+  height: 200px;
+  gap: 10px;
+`;
+
+const Item = styled.div`
+  border: 4px solid #ddd;
+`;
 
 export default CoinList;
