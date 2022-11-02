@@ -1,10 +1,10 @@
 import React from "react";
-import CoinList from "./CoinList";
+import MovieSite from "./MovieSite";
 
 function App() {
   return (
     <>
-      <CoinList />
+      <MovieSite />
     </>
   );
 

@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
+import { Table } from "react-bootstrap";
+
 function CoinList() {
   const [loading, setLoading] = useState(true);
   const [coins, setCoins] = useState([]);
